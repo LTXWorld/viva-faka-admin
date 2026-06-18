@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import FileInput from '@/components/FileInput.vue'
 
 const props = defineProps<{
@@ -28,6 +29,10 @@ const batchForm = ref({
   batch_no: '',
   note: '',
   deduplicate: true,
+  recharge_provider: '__none__',
+  recharge_product_type: '__none__',
+  redeem_mode: '__none__',
+  redeem_url: '',
 })
 const batchSubmitting = ref(false)
 const batchError = ref('')
@@ -39,6 +44,10 @@ const importForm = ref({
   batch_no: '',
   note: '',
   deduplicate: true,
+  recharge_provider: '__none__',
+  recharge_product_type: '__none__',
+  redeem_mode: '__none__',
+  redeem_url: '',
 })
 const importSubmitting = ref(false)
 const importError = ref('')
@@ -49,6 +58,10 @@ const resetBatchForm = () => {
   batchForm.value.batch_no = ''
   batchForm.value.note = ''
   batchForm.value.deduplicate = true
+  batchForm.value.recharge_provider = '__none__'
+  batchForm.value.recharge_product_type = '__none__'
+  batchForm.value.redeem_mode = '__none__'
+  batchForm.value.redeem_url = ''
   batchError.value = ''
   batchSuccess.value = ''
 }
@@ -82,6 +95,10 @@ const handleBatchCreate = async () => {
       batch_no: batchForm.value.batch_no.trim(),
       note: batchForm.value.note.trim(),
       deduplicate: batchForm.value.deduplicate,
+      recharge_provider: batchForm.value.recharge_provider === '__none__' ? '' : batchForm.value.recharge_provider,
+      recharge_product_type: batchForm.value.recharge_product_type === '__none__' ? '' : batchForm.value.recharge_product_type,
+      redeem_mode: batchForm.value.redeem_mode === '__none__' ? '' : batchForm.value.redeem_mode,
+      redeem_url: batchForm.value.redeem_url.trim(),
     })
     batchSuccess.value = t('admin.cardSecrets.success.batchCreated')
     batchForm.value.secrets = ''
@@ -106,6 +123,10 @@ const resetImportForm = () => {
   importForm.value.batch_no = ''
   importForm.value.note = ''
   importForm.value.deduplicate = true
+  importForm.value.recharge_provider = '__none__'
+  importForm.value.recharge_product_type = '__none__'
+  importForm.value.redeem_mode = '__none__'
+  importForm.value.redeem_url = ''
   importError.value = ''
   importSuccess.value = ''
 }
@@ -136,6 +157,10 @@ const handleImport = async () => {
     formData.append('batch_no', importForm.value.batch_no.trim())
     formData.append('note', importForm.value.note.trim())
     formData.append('deduplicate', String(importForm.value.deduplicate))
+    formData.append('recharge_provider', importForm.value.recharge_provider === '__none__' ? '' : importForm.value.recharge_provider)
+    formData.append('recharge_product_type', importForm.value.recharge_product_type === '__none__' ? '' : importForm.value.recharge_product_type)
+    formData.append('redeem_mode', importForm.value.redeem_mode === '__none__' ? '' : importForm.value.redeem_mode)
+    formData.append('redeem_url', importForm.value.redeem_url.trim())
     formData.append('file', importForm.value.file)
     await adminAPI.importCardSecretCSV(formData)
     importSuccess.value = t('admin.cardSecrets.success.imported')
@@ -168,6 +193,47 @@ const handleImport = async () => {
             <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.cardSecrets.noteLabel') }}</label>
             <Input v-model="batchForm.note" :placeholder="t('admin.cardSecrets.notePlaceholder')" />
           </div>
+        </div>
+        <div class="rounded-lg border border-border bg-muted/30 p-4 space-y-3">
+          <div class="text-sm font-semibold text-foreground">兑换来源绑定（可选）</div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-muted-foreground mb-1.5">供应商</label>
+              <Select v-model="batchForm.recharge_provider">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">不绑定</SelectItem>
+                  <SelectItem value="lyxazy">lyxazy</SelectItem>
+                  <SelectItem value="aidone">aidone</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-muted-foreground mb-1.5">产品类型</label>
+              <Select v-model="batchForm.recharge_product_type">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">不绑定</SelectItem>
+                  <SelectItem value="chatgpt_plus">ChatGPT Plus</SelectItem>
+                  <SelectItem value="gemini">Gemini</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-muted-foreground mb-1.5">兑换模式</label>
+              <Select v-model="batchForm.redeem_mode">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">不绑定</SelectItem>
+                  <SelectItem value="api">API 自动兑换</SelectItem>
+                  <SelectItem value="external_url">外部链接</SelectItem>
+                  <SelectItem value="manual">人工处理</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <Input v-model="batchForm.redeem_url" placeholder="外部兑换地址（redeem_mode=external_url 时可填）" />
+          <p class="text-xs text-muted-foreground">建议 ChatGPT Plus 绑定 lyxazy + chatgpt_plus + api；Gemini 绑定 aidone + gemini + api。</p>
         </div>
         <div class="flex items-start justify-between gap-4 border-y border-border py-3">
           <div>
@@ -218,6 +284,47 @@ const handleImport = async () => {
             <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.cardSecrets.noteLabel') }}</label>
             <Input v-model="importForm.note" :placeholder="t('admin.cardSecrets.importNotePlaceholder')" />
           </div>
+        </div>
+        <div class="rounded-lg border border-border bg-muted/30 p-4 space-y-3">
+          <div class="text-sm font-semibold text-foreground">兑换来源绑定（可选）</div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-muted-foreground mb-1.5">供应商</label>
+              <Select v-model="importForm.recharge_provider">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">不绑定</SelectItem>
+                  <SelectItem value="lyxazy">lyxazy</SelectItem>
+                  <SelectItem value="aidone">aidone</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-muted-foreground mb-1.5">产品类型</label>
+              <Select v-model="importForm.recharge_product_type">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">不绑定</SelectItem>
+                  <SelectItem value="chatgpt_plus">ChatGPT Plus</SelectItem>
+                  <SelectItem value="gemini">Gemini</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-muted-foreground mb-1.5">兑换模式</label>
+              <Select v-model="importForm.redeem_mode">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__none__">不绑定</SelectItem>
+                  <SelectItem value="api">API 自动兑换</SelectItem>
+                  <SelectItem value="external_url">外部链接</SelectItem>
+                  <SelectItem value="manual">人工处理</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <Input v-model="importForm.redeem_url" placeholder="外部兑换地址（redeem_mode=external_url 时可填）" />
+          <p class="text-xs text-muted-foreground">建议 ChatGPT Plus 绑定 lyxazy + chatgpt_plus + api；Gemini 绑定 aidone + gemini + api。</p>
         </div>
         <div class="flex items-start justify-between gap-4 border-y border-border py-3">
           <div>
