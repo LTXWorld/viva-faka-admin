@@ -414,6 +414,12 @@ const navGroups = computed<NavGroup[]>(() => {
           permission: 'GET:/admin/procurement-orders',
         },
         {
+          label: t('admin.navItems.rechargeJobs'),
+          to: '/recharge-jobs',
+          icon: ReceiptText,
+          permission: 'GET:/admin/recharge-jobs',
+        },
+        {
           label: t('admin.navItems.reconciliation'),
           to: '/reconciliation',
           icon: ClipboardCheck,

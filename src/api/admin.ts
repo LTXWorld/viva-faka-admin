@@ -498,6 +498,9 @@ export const adminAPI = {
   retryProcurementOrder: (id: number) => api.post(`/admin/procurement-orders/${id}/retry`),
   cancelProcurementOrder: (id: number) => api.post(`/admin/procurement-orders/${id}/cancel`),
 
+  // 兑换/直充记录
+  getRechargeJobs: (params?: Record<string, unknown>) => api.get('/admin/recharge-jobs', { params }),
+
   // 对账管理
   runReconciliation: (data: { connection_id: number; type: string; time_range_start: string; time_range_end: string }) => api.post('/admin/reconciliation/run', data),
   getReconciliationJobs: (params?: Record<string, unknown>) => api.get('/admin/reconciliation/jobs', { params }),
