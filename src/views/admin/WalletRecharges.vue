@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { paymentStatusClass, paymentStatusLabel } from '@/utils/status'
 import { formatDate, toRFC3339 } from '@/utils/format'
 import ComplianceGuardWrapper from '@/components/ComplianceGuardWrapper.vue'
+import { adminHref } from '@/utils/adminPath'
 
 const { t } = useI18n()
 const loading = ref(true)
@@ -25,8 +26,6 @@ const pagination = ref({
   total: 0,
   total_page: 1,
 })
-const adminPath = import.meta.env.VITE_ADMIN_PATH || ''
-
 const filters = reactive({
   rechargeNo: '',
   userId: '',
@@ -92,9 +91,9 @@ const changePageSize = (size: number) => {
   fetchRecharges(1)
 }
 
-const userLink = (userID: number) => `${adminPath}/users/${userID}`
-const paymentLink = (paymentID: number) => `${adminPath}/payments?payment_id=${paymentID}`
-const channelLink = (channelID: number) => `${adminPath}/payment-channels?channel_id=${channelID}`
+const userLink = (userID: number) => adminHref(`/users/${userID}`)
+const paymentLink = (paymentID: number) => adminHref('/payments', { payment_id: paymentID })
+const channelLink = (channelID: number) => adminHref('/payment-channels', { channel_id: channelID })
 
 const statusClass = (status?: string) => paymentStatusClass(status)
 const statusLabel = (status?: string) => paymentStatusLabel(t, status)

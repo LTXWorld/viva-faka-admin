@@ -18,11 +18,11 @@ import { useListRefresh, type ListFetchOptions } from '@/composables/useListRefr
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatDate, getLocalizedText } from '@/utils/format'
 import { confirmAction } from '@/utils/confirm'
+import { adminHref } from '@/utils/adminPath'
 import CardSecretEditModal from './components/CardSecretEditModal.vue'
 
 const { t } = useI18n()
 const { refreshing, refreshList } = useListRefresh()
-const adminPath = import.meta.env.VITE_ADMIN_PATH || ''
 const pageSizeOptions = [10, 20, 50, 100, 200]
 
 const productKeyword = ref('')
@@ -212,8 +212,8 @@ const resolveSecretBatchLabel = (secret: AdminCardSecret) => {
   return '-'
 }
 
-const productLink = (productId: number) => `${adminPath}/products?product_id=${productId}`
-const orderLink = (orderId: number) => `${adminPath}/orders?order_id=${orderId}`
+const productLink = (productId: number) => adminHref('/products', { product_id: productId })
+const orderLink = (orderId: number) => adminHref('/orders', { order_id: orderId })
 
 const clearBatchActionMessages = () => {
   batchActionError.value = ''

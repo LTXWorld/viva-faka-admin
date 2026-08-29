@@ -11,9 +11,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getLocalizedText } from '@/utils/format'
+import { adminHref } from '@/utils/adminPath'
 
 const { t } = useI18n()
-const adminPath = import.meta.env.VITE_ADMIN_PATH || ''
 
 const productKeyword = ref('')
 const productOptions = ref<AdminProduct[]>([])
@@ -132,7 +132,7 @@ const exportDisabled = computed(() => {
   return exporting.value || !currentProductId.value || exportCount.value <= 0 || exportCount.value > currentAvailableCount.value
 })
 
-const productLink = (productId: number) => `${adminPath}/products?product_id=${productId}`
+const productLink = (productId: number) => adminHref('/products', { product_id: productId })
 
 const resetMessages = () => {
   successMessage.value = ''

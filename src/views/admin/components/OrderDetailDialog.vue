@@ -22,6 +22,7 @@ import {
 } from '@/utils/fulfillment'
 import { formatDate, formatMoney, getLocalizedText, hasPositiveAmount } from '@/utils/format'
 import { resolveSkuCodeFromSnapshot, resolveSkuSpecFromSnapshot } from '@/utils/sku'
+import { adminHref } from '@/utils/adminPath'
 
 const props = defineProps<{
   modelValue: boolean
@@ -59,13 +60,11 @@ const manualRefundForm = reactive({
   reason: '',
 })
 
-const adminPath = import.meta.env.VITE_ADMIN_PATH || ''
-
-const userDetailLink = (userId: number) => `${adminPath}/users/${userId}`
-const productLink = (productId: number) => `${adminPath}/products?product_id=${productId}`
-const couponCodeLink = (code: string) => `${adminPath}/coupons?code=${encodeURIComponent(code)}`
-const promotionLink = (promotionId: number) => `${adminPath}/promotions?id=${promotionId}`
-const paymentLink = (paymentId: number) => `${adminPath}/payments?payment_id=${paymentId}`
+const userDetailLink = (userId: number) => adminHref(`/users/${userId}`)
+const productLink = (productId: number) => adminHref('/products', { product_id: productId })
+const couponCodeLink = (code: string) => adminHref('/coupons', { code })
+const promotionLink = (promotionId: number) => adminHref('/promotions', { id: promotionId })
+const paymentLink = (paymentId: number) => adminHref('/payments', { payment_id: paymentId })
 
 const statusLabel = (status: string) => orderStatusLabel(t, status)
 const statusClass = (status: string) => orderStatusClass(status)

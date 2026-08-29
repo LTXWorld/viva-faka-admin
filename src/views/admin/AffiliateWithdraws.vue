@@ -21,6 +21,7 @@ import { confirmAction } from '@/utils/confirm'
 import { notifyError, notifySuccess } from '@/utils/notify'
 import { formatDate } from '@/utils/format'
 import ComplianceGuardWrapper from '@/components/ComplianceGuardWrapper.vue'
+import { adminHref } from '@/utils/adminPath'
 
 const { t } = useI18n()
 const loading = ref(true)
@@ -33,8 +34,6 @@ const pagination = ref({
   total: 0,
   total_page: 1,
 })
-const adminPath = import.meta.env.VITE_ADMIN_PATH || ''
-
 const filters = reactive({
   keyword: '',
   affiliateProfileId: '',
@@ -42,7 +41,7 @@ const filters = reactive({
 })
 
 const normalizeFilterValue = (value: string) => (value === '__all__' ? '' : value)
-const userDetailLink = (userId: number) => `${adminPath}/users/${userId}`
+const userDetailLink = (userId: number) => adminHref(`/users/${userId}`)
 const resolveAffiliateUserID = (item: AdminAffiliateWithdraw) => Number(item?.affiliate_profile?.user_id || item?.affiliate_profile?.user?.id || 0)
 
 const fetchRows = async (page = 1, options: ListFetchOptions = {}) => {

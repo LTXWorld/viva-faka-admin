@@ -19,6 +19,7 @@ import ListPagination from '@/components/ListPagination.vue'
 import { useListRefresh, type ListFetchOptions } from '@/composables/useListRefresh'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { confirmAction } from '@/utils/confirm'
+import { adminTo } from '@/utils/adminPath'
 import { useFormValidation, rules } from '@/composables/useFormValidation'
 import { ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-vue-next'
 
@@ -27,7 +28,6 @@ const loading = ref(true)
 const { refreshing, refreshList } = useListRefresh()
 const users = ref<AdminUser[]>([])
 const selectedIds = ref<number[]>([])
-const adminPath = import.meta.env.VITE_ADMIN_PATH || ''
 const pagination = ref({
   page: 1,
   page_size: 20,
@@ -167,7 +167,7 @@ const resetFilters = () => {
   fetchUsers(1)
 }
 
-const userDetailLink = (userId: number) => `${adminPath}/users/${userId}`
+const userDetailLink = (userId: number) => adminTo(`/users/${userId}`)
 
 const allSelected = computed(() => {
   if (users.value.length === 0) return false
