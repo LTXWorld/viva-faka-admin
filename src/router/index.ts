@@ -233,12 +233,6 @@ const routes = [
         meta: { permission: 'GET:/admin/procurement-orders' },
       },
       {
-        path: 'recharge-jobs',
-        name: 'recharge-jobs',
-        component: () => import('@/views/admin/RechargeJobs.vue'),
-        meta: { permission: 'GET:/admin/recharge-jobs' },
-      },
-      {
         path: 'reconciliation',
         name: 'reconciliation',
         component: () => import('@/views/admin/Reconciliation.vue'),

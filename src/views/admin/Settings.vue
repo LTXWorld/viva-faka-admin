@@ -181,6 +181,7 @@ const form = reactive({
     site_icon: '',
     site_description: createLocalizedField(),
   },
+  card_redeem_url: '',
   currency: 'CNY',
   order_max_refund_days: 30,
   contact: {
@@ -378,6 +379,7 @@ const fetchSettings = async () => {
         form.brand.site_icon = String(brand.site_icon || '')
         form.brand.site_description = normalizeLocalizedField(brand.site_description)
       }
+      form.card_redeem_url = String(data.card_redeem_url || '')
       {
         const rawCurrency = String(data.currency || 'CNY').trim().toUpperCase()
         form.currency = /^[A-Z]{3}$/.test(rawCurrency) ? rawCurrency : 'CNY'
@@ -584,6 +586,7 @@ const saveSiteSettings = async () => {
     key: 'site_config',
     value: {
       brand: form.brand,
+      card_redeem_url: form.card_redeem_url.trim(),
       currency: String(form.currency || 'CNY').trim().toUpperCase(),
       contact: form.contact,
       seo: form.seo,
@@ -889,6 +892,11 @@ onMounted(() => {
           <div class="space-y-2">
             <label class="text-xs font-medium text-muted-foreground">{{ t('admin.settings.brand.siteUrl') }}</label>
             <Input v-model="form.brand.site_url" :placeholder="t('admin.settings.brand.siteUrlPlaceholder')" />
+          </div>
+          <div class="space-y-2">
+            <label class="text-xs font-medium text-muted-foreground">{{ t('admin.settings.brand.cardRedeemUrl') }}</label>
+            <Input v-model="form.card_redeem_url" type="url" :placeholder="t('admin.settings.brand.cardRedeemUrlPlaceholder')" />
+            <p class="text-xs text-muted-foreground">{{ t('admin.settings.brand.cardRedeemUrlTip') }}</p>
           </div>
           <div class="space-y-2">
             <label class="text-xs font-medium text-muted-foreground">{{ t('admin.settings.brand.siteIcon') }}</label>

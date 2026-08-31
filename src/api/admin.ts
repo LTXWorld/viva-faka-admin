@@ -451,7 +451,7 @@ export const adminAPI = {
   deleteMemberLevelPrice: (id: number) => api.delete(`/admin/member-level-prices/${id}`),
   setUserMemberLevel: (userId: number, memberLevelId: number) => api.put(`/admin/users/${userId}/member-level`, { member_level_id: memberLevelId }),
   backfillMemberLevels: () => api.post('/admin/member-levels/backfill'),
-  createCardSecretBatch: (data: { product_id: number; sku_id?: number; name?: string; secrets: string[]; batch_no?: string; note?: string; deduplicate?: boolean; recharge_provider?: string; recharge_product_type?: string; redeem_mode?: string; redeem_url?: string }) => api.post('/admin/card-secrets/batch', data),
+  createCardSecretBatch: (data: { product_id: number; sku_id?: number; name?: string; secrets: string[]; batch_no?: string; note?: string; deduplicate?: boolean }) => api.post('/admin/card-secrets/batch', data),
   importCardSecretCSV: (formData: FormData) =>
     api.post('/admin/card-secrets/import', formData),
   getCardSecrets: (params?: Record<string, unknown>) => api.get('/admin/card-secrets', { params }),
@@ -497,9 +497,6 @@ export const adminAPI = {
   downloadProcurementUpstreamPayload: (id: number) => api.get(`/admin/procurement-orders/${id}/upstream-payload/download`, { blob: true }),
   retryProcurementOrder: (id: number) => api.post(`/admin/procurement-orders/${id}/retry`),
   cancelProcurementOrder: (id: number) => api.post(`/admin/procurement-orders/${id}/cancel`),
-
-  // 兑换/直充记录
-  getRechargeJobs: (params?: Record<string, unknown>) => api.get('/admin/recharge-jobs', { params }),
 
   // 对账管理
   runReconciliation: (data: { connection_id: number; type: string; time_range_start: string; time_range_end: string }) => api.post('/admin/reconciliation/run', data),
